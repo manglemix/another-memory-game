@@ -47,8 +47,8 @@
 	}
 </script>
 
-<audio src="/slide.wav" preload="auto" bind:this={pressedAudio}></audio>
-<audio src="/ding.wav" preload="auto" bind:this={doneAudio}></audio>
+<audio src="slide.wav" preload="auto" bind:this={pressedAudio}></audio>
+<audio src="ding.wav" preload="auto" bind:this={doneAudio}></audio>
 
 <div id="occluder">
 	<div
