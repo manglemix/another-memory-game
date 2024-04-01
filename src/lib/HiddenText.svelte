@@ -10,6 +10,8 @@
 	export let categoryIndex = 0;
 	export let seed = 0;
 	export const maxCategories = 26;
+	export let x = 0;
+	export let y = 0;
 
 	if (categories > maxCategories) {
 		throw new Error('Too many categories');
@@ -35,7 +37,7 @@
 <style>
 	span {
 		text-align: center;
-		font-size: min(var(--width), var(--height));
+		font-size: calc(min(var(--width), var(--height)) * 0.82);
 		transition: opacity 0.3s;
 	}
 

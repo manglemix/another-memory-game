@@ -1,6 +1,8 @@
 <script lang="ts">
-	import { DefaultOccluder, type Occluder, HiddenText, type Hidden } from '$lib';
+	import { DefaultOccluder, type Occluder, HiddenText, type Hidden, HiddenBlocks } from '$lib';
 
+	let theme = 'default';
+	let newTheme = theme;
 	let rows = 4;
 	let cols = 4;
 	let matches = 0;
@@ -82,10 +84,6 @@
 					occluders.forEach((occluder) => {
 						occluder.pressed = false;
 						currentOccluder.pressedAudio?.play();
-				// 		let tmp = firstPressedOccluder;
-				// setTimeout(() => {
-				// 		(tmp as Occluder)?.pressedAudio?.play();
-				// }, 30);
 						firstPressedOccluder = null;
 						firstPressedHidden = null;
 					});
@@ -100,6 +98,21 @@
 
 	function keyUp(x: number, y: number) {
 		occluders[y * cols + x].keyDown = false;
+	}
+
+	$: if (newTheme !== theme) {
+		pressedCount = 0;
+		firstPressedHidden = null;
+		matches = 0;
+		firstPressedOccluder = null;
+		theme = newTheme;
+		occluders.forEach((occluder) => {
+			occluder.done = false;
+			occluder.pressed = false;
+		});
+		hiddens.forEach((hidden) => {
+			hidden.done = false;
+		});
 	}
 </script>
 
@@ -120,19 +133,37 @@
 						on:mousedown={() => keyDown(x, y)}
 						on:mouseup={() => keyUp(x, y)}
 					>
-						<DefaultOccluder bind:this={occluders[y * cols + x]}>
+					{#if theme === "blocks"}
+						<DefaultOccluder bind:this={occluders[y * cols + x]} {x} {y}>
+							<HiddenBlocks
+								bind:seed={seed}
+								bind:categories={categories}
+								bind:categoryIndex={categoryIndices[y * cols + x]}
+								bind:this={hiddens[y * cols + x]}
+								{x} {y}
+							/>
+						</DefaultOccluder>
+					{:else}
+						<DefaultOccluder bind:this={occluders[y * cols + x]} {x} {y}>
 							<HiddenText
 								bind:seed={seed}
 								bind:categories={categories}
 								bind:categoryIndex={categoryIndices[y * cols + x]}
 								bind:this={hiddens[y * cols + x]}
+								{x} {y}
 							/>
 						</DefaultOccluder>
+					{/if}
 					</button>
 				{/each}
 			</div>
 		{/each}
 	</div>
+
+	<select bind:value={newTheme}>
+		<option value="default">Text</option>
+		<option value="blocks">Blocks (WIP)</option>
+	</select>
 </main>
 
 <style>
@@ -193,5 +224,13 @@
 		height: 5rem;
 		background-color: rgba(0, 0, 0, 0);
 		border: none;
+	}
+
+	select {
+		margin-top: 2rem;
+		margin-bottom: 4rem;
+		color: white;
+		background-color: rgb(15, 15, 15);
+		font-size: 1rem;
 	}
 </style>

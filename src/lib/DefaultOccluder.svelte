@@ -10,6 +10,8 @@
 	export let orgHeight = 5;
 	export let pressedAudio: HTMLAudioElement | undefined = undefined;
 	export let doneAudio: HTMLAudioElement | undefined = undefined;
+	export let x = 0;
+	export let y = 0;
 	let width = orgWidth;
 	let height = orgHeight;
 	let classes = '';
