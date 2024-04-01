@@ -2,7 +2,6 @@
 
 <script lang="ts">
 	import { Block } from '$lib';
-	import Page from '../routes/+page.svelte';
 	import { RNG } from './rng';
 
 	// const cameraPos = [4.2, -4.2, 4.0]
@@ -56,7 +55,7 @@
 						newPos[0]--;
 						break;
 				}
-				if (Math.abs(newPos[0]) > extents || Math.abs(newPos[1]) > extents || Math.abs(newPos[2]) > extents) {
+				if (Math.sqrt(newPos[0] ** 2 + newPos[1] ** 2 + newPos[2] ** 2) > extents) {
 					continue;
 				}
 				currentPos = newPos;
