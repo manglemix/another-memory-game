@@ -8,6 +8,8 @@
 
 	export let orgWidth = 5;
 	export let orgHeight = 5;
+	export let pressedAudio: HTMLAudioElement | undefined = undefined;
+	export let doneAudio: HTMLAudioElement | undefined = undefined;
 	let width = orgWidth;
 	let height = orgHeight;
 	let classes = '';
@@ -26,7 +28,7 @@
 			side = 'bottom';
 			break;
 	}
-
+	
 	$: if (keyDown) {
 		width = orgWidth * 0.97;
 		height = orgHeight * 0.97;
@@ -45,12 +47,16 @@
 	}
 </script>
 
+<audio src="/slide.wav" preload="auto" bind:this={pressedAudio}></audio>
+<audio src="/ding.wav" preload="auto" bind:this={doneAudio}></audio>
+
 <div id="occluder">
 	<div
 		id="panel"
 		style="animation-duration: {duration}s; --height: {height}rem; --width: {width}rem;"
 		class={classes}
-	></div>
+	>
+    </div>
 	<div id="inner">
 		<slot />
 	</div>

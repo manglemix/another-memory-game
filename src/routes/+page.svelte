@@ -37,6 +37,7 @@
 		} else if (firstPressedHidden === currentHidden) {
 			return;
 		}
+		currentOccluder.pressedAudio?.play();
 		occluders[y * cols + x].pressed = true;
 		if (++pressedCount >= 2) {
 			if (currentHidden.categoryIndex === firstPressedHidden.categoryIndex) {
@@ -48,6 +49,8 @@
 
 					(firstPressedOccluder as Occluder).done = true;
 					currentOccluder.done = true;
+
+					currentOccluder.doneAudio?.play();
 
 					firstPressedHidden = null;
 					firstPressedOccluder = null;
@@ -62,6 +65,7 @@
 							randomizeCategoryIndices();
 							occluders.forEach((occluder) => {
 								occluder.done = false;
+								currentOccluder.pressedAudio?.play();
 							});
 							setTimeout(() => {
 								matches = 0;
@@ -74,11 +78,16 @@
 				}, 500);
 			} else {
 				setTimeout(() => {
-					firstPressedHidden = null;
-					firstPressedOccluder = null;
 					pressedCount = 0;
 					occluders.forEach((occluder) => {
 						occluder.pressed = false;
+						currentOccluder.pressedAudio?.play();
+				// 		let tmp = firstPressedOccluder;
+				// setTimeout(() => {
+				// 		(tmp as Occluder)?.pressedAudio?.play();
+				// }, 30);
+						firstPressedOccluder = null;
+						firstPressedHidden = null;
 					});
 				}, 700);
 			}
@@ -93,6 +102,10 @@
 		occluders[y * cols + x].keyDown = false;
 	}
 </script>
+
+<svelte:head>
+	<title>Another Memory Game</title>
+</svelte:head>
 
 <header>
 	<h1>Another Memory Game</h1>
