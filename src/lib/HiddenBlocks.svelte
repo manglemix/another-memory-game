@@ -2,9 +2,11 @@
 
 <script lang="ts">
 	import { Block } from '$lib';
+	import Page from '../routes/+page.svelte';
 	import { RNG } from './rng';
 
-	const cameraPos = [4.2, -4.2, 4.0]
+	// const cameraPos = [4.2, -4.2, 4.0]
+	export let extents = 3;
 	export let width = 5;
 	export let height = 5;
 	export let categories = 8;
@@ -28,7 +30,8 @@
 		}
 		rng = new RNG(rng.nextInt());
 		let currentPos = [0, 0, 0];
-		let blocksSet: Set<number[]> = new Set([currentPos]);
+		blocks = [[...currentPos]];
+		let blocksSet: Set<string> = new Set(["0,0,0"]);
 
 		for (let i = 0; i < categoryIndex; i++) {
 			while (true) {
@@ -53,34 +56,33 @@
 						newPos[0]--;
 						break;
 				}
-				if (Math.abs(newPos[0]) > 2 || Math.abs(newPos[1]) > 2 || Math.abs(newPos[2]) > 2) {
+				if (Math.abs(newPos[0]) > extents || Math.abs(newPos[1]) > extents || Math.abs(newPos[2]) > extents) {
 					continue;
 				}
 				currentPos = newPos;
-				if (blocksSet.has(newPos)) {
+				const newPosStr = newPos.join(',');
+				if (blocksSet.has(newPosStr)) {
 					continue;
 				}
-				blocksSet.add(newPos);
+				blocksSet.add(newPosStr);
+				blocks.push(newPos);
 				break;
 			}
 		}
 
-		blocks = Array.from(blocksSet);
+		console.log(blocks);
 		blocks.sort((pos1, pos2) => {
-			pos1 = [...pos1];
-			pos2 = [...pos2];
-			
-			pos1[0] -= cameraPos[0];
-			pos1[1] -= cameraPos[1];
-			pos1[2] -= cameraPos[2];
-
-			pos2[0] -= cameraPos[0];
-			pos2[1] -= cameraPos[1];
-			pos2[2] -= cameraPos[2];
-
-			let distance1 = Math.sqrt(pos1[0] * pos1[0] + pos1[1] * pos1[1] + pos1[2] * pos1[2]);
-			let distance2 = Math.sqrt(pos2[0] * pos2[0] + pos2[1] * pos2[1] + pos2[2] * pos2[2]);
-			return distance2 - distance1;
+			if (pos1[1] + extents < pos2[1] + extents) {
+				return 1;
+			} else if (pos1[1] + extents > pos2[1] + extents) {
+				return -1;
+			} else if ((pos1[2] - pos1[0]) < (pos2[2] - pos2[0])) {
+				return -1;
+			} else if ((pos1[2] - pos1[0]) > (pos2[2] - pos2[0])) {
+				return 1;
+			} else {
+				return 0;
+			}
 		});
 	}
 

@@ -162,7 +162,7 @@
 
 	<select bind:value={newTheme}>
 		<option value="default">Text</option>
-		<option value="blocks">Blocks (WIP)</option>
+		<option value="blocks">Blocks</option>
 	</select>
 </main>
 
