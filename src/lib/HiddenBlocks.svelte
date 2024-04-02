@@ -5,7 +5,7 @@
 	import { RNG } from './rng';
 
 	// const cameraPos = [4.2, -4.2, 4.0]
-	export let extents = 3;
+	export let extents = 2.5;
 	export let width = 5;
 	export let height = 5;
 	export let categories = 8;
